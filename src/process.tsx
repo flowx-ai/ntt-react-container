@@ -11,7 +11,7 @@ import { useLanguage } from './hooks/useLanguage'
 const { baseUrl, staticAssetsPath, processApiPath } = environment
 
 const processName = '<PROCESS_NAME>'
-const appId = '<APP_ID>'
+const projectId = '<PROJECT_ID>'
 const themeId = '<THEME_ID>'
 const processStartData = {}
 
@@ -33,7 +33,7 @@ export default function ProcessComponent() {
         components={{ MyCustomComponentIdentifier: MyCustomComponent }}
         staticAssetsPath={staticAssetsPath}
         locale="en-US"
-        appInfo={{ appId }}
+        projectInfo={{ projectId }}
       />
     )
   )

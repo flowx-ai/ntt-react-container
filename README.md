@@ -72,10 +72,10 @@ npm run dev
 
 - Change the name of the running process
 
-In `src/pages/main/main.tsx` file, update the `startProcess` method parameter with the name, appId and optionally the theme id of the process to be run.
+In `src/pages/main/main.tsx` file, update the `startProcess` method parameter with the name, projectId and optionally the theme id of the process to be run.
 
 ```html
-<button onClick={() => startProcess('<PROCESS_NAME>', '<APP_ID>', <THEME_ID>)}>Start Demo Process</button>
+<button onClick={() => startProcess('<PROCESS_NAME>', '<PROJECT_ID>', <THEME_ID>)}>Start Demo Process</button>
 ```
 
 ### Prerequisites & Documentation
