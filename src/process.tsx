@@ -1,5 +1,7 @@
 import { useAuth } from 'oidc-react'
+import { useEffect, useCallback } from 'react'
 
+import { AnalyticsData } from '@flowx/core-sdk'
 import { FlxProcessRenderer } from '@flowx/react-sdk'
 
 import { environment } from './environment'
@@ -18,6 +20,18 @@ const processStartData = {}
 export default function ProcessComponent() {
   const auth = useAuth()
   const { getSelectedLanguage } = useLanguage()
+
+  const analyticsListener = useCallback((event: CustomEvent<AnalyticsData>) => {
+    console.log('Received flowx:analytics event:', event.detail);
+  }, [])
+
+  useEffect(() => {
+    document.addEventListener('flowx:analytics', analyticsListener)
+
+    return () => {
+      document.removeEventListener('flowx:analytics', analyticsListener)
+    }
+  }, [])
 
   return (
     auth.userData?.access_token && (
