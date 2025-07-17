@@ -15,6 +15,7 @@ const { baseUrl, staticAssetsPath, processApiPath } = environment
 const processName = '<PROCESS_NAME>'
 const projectId = '<PROJECT_ID>'
 const themeId = '<THEME_ID>'
+const workspaceId = '<WORKSPACE_ID>'
 const processStartData = {}
 
 export default function ProcessComponent() {
@@ -41,6 +42,7 @@ export default function ProcessComponent() {
         authToken={auth.userData?.access_token}
         processName={processName}
         processStartData={processStartData}
+        workspaceId={workspaceId}
         processApiPath={processApiPath}
         themeId={themeId}
         isDraft={false}
