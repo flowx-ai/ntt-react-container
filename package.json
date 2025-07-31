@@ -10,11 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@flowx/core-sdk": "5.26.10",
-    "@flowx/core-theme": "5.26.10",
-    "@flowx/react-sdk": "5.26.10",
-    "@flowx/react-theme": "5.26.10",
-    "@flowx/react-ui-toolkit": "5.26.10",
+    "@flowx/core-sdk": "9.68.3",
+    "@flowx/core-theme": "9.68.3",
+    "@flowx/react-sdk": "9.68.3",
+    "@flowx/react-theme": "9.68.3",
+    "@flowx/react-ui-toolkit": "9.68.3",
     "ag-grid-react": "^32.3.1",
     "air-datepicker": "^3.5.3",
     "axios": "^1.7.7",

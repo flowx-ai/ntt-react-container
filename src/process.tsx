@@ -35,8 +35,9 @@ export default function ProcessComponent() {
     console.log('Process has ended')
   }, [])
 
-  const analyticsListener = useCallback((event: CustomEvent<AnalyticsData>) => {
-    console.log('Received flowx:analytics event:', event.detail);
+  const analyticsListener = useCallback((event: Event) => {
+    const { detail } = event as CustomEvent<AnalyticsData>
+    console.log('Received flowx:analytics event:', detail);
   }, [])
 
   useEffect(() => {
@@ -65,6 +66,7 @@ export default function ProcessComponent() {
         projectInfo={{ projectId }}
         onProcessEnded={handleProcessEnded}
         customLoader={customLoader}
+        cache={false}
       />
     )
   )
