@@ -1,5 +1,5 @@
 import { useAuth } from 'oidc-react'
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useMemo } from 'react'
 
 import { AnalyticsData } from '@flowx/core-sdk'
 import { FlxProcessRenderer } from '@flowx/react-sdk'
@@ -21,6 +21,19 @@ const processStartData = {}
 export default function ProcessComponent() {
   const auth = useAuth()
   const { getSelectedLanguage } = useLanguage()
+
+  const customLoader = useMemo(() => {
+    return {
+      startProcess: <div>Starting the process...</div>,
+      reloadProcess: <div>Loading...</div>,
+      action1: <div>Loading action1...</div>,
+      action2: <div>Loading action2...</div>,
+    }
+  }, [])
+
+  const handleProcessEnded = useCallback(() => {
+    console.log('Process has ended')
+  }, [])
 
   const analyticsListener = useCallback((event: CustomEvent<AnalyticsData>) => {
     console.log('Received flowx:analytics event:', event.detail);
@@ -50,6 +63,8 @@ export default function ProcessComponent() {
         staticAssetsPath={staticAssetsPath}
         locale="en-US"
         projectInfo={{ projectId }}
+        onProcessEnded={handleProcessEnded}
+        customLoader={customLoader}
       />
     )
   )
