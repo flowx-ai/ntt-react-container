@@ -176,3 +176,13 @@ jobs:
             ${{ env.ARTIFACT_REGISTRY }}/${{ github.repository }}/${{ needs.release.outputs.repo_name }}:${{ needs.release.outputs.image_tag }}
           # cache-from: type=registry,ref=${{ env.ARTIFACT_REGISTRY }}/${{ github.repository }}/cache/${{ needs.release.outputs.repo_name }}:buildcache
           # cache-to: type=registry,ref=${{ env.ARTIFACT_REGISTRY }}/${{ github.repository }}/cache/${{ needs.release.outputs.repo_name }}:buildcache,mode=max
+
+      - name: Invoke workflow in another repo with inputs
+        if: ${{ matrix.name == 'sbx' || matrix.condition }}
+        uses: benc-uk/workflow-dispatch@e2e5e9a103e331dad343f381a29e654aea3cf8fc # v1.2.4
+        with:
+          workflow: delegated-deploy.yaml
+          repo: flowx-ai/flowx-argocd-install-ntt
+          ref: main
+          inputs: '{"component":"react-container","version":"${{ needs.release.outputs.image_tag }}"}'
+          token: "${{ secrets.ALEXPIRTEA_FLOWX_TOKEN }}"
