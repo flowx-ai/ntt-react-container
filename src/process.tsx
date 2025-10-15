@@ -1,16 +1,17 @@
 import { useAuth } from 'oidc-react'
-import { useEffect, useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 
 import { AnalyticsData } from '@flowx/core-sdk'
 import { FlxProcessRenderer } from '@flowx/react-sdk'
 
 import { environment } from './environment'
+import { environment as prodEnvironment } from './environment.prod'
 
 import { MyCustomComponent } from './components/MyCustomComponent/MyCustomComponent'
 
 import { useLanguage } from './hooks/useLanguage'
 
-const { baseUrl, staticAssetsPath, processApiPath } = environment
+const { baseUrl, staticAssetsPath, processApiPath } = import.meta.env.DEV ? environment : prodEnvironment
 
 const processName = '<PROCESS_NAME>'
 const projectId = '<PROJECT_ID>'

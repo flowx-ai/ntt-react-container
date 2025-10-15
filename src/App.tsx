@@ -1,10 +1,11 @@
 import { AuthProvider, AuthProviderProps } from 'oidc-react'
 
 import { environment } from './environment'
+import { environment as prodEnvironment } from './environment.prod'
 
 import Process from './process'
 
-const { keycloak } = environment
+const { keycloak } = import.meta.env.DEV ? environment : prodEnvironment
 
 const oidcConfig: AuthProviderProps = {
   onSignIn: () => {
