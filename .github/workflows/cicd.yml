@@ -173,5 +173,5 @@ jobs:
           push: true
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ needs.release.outputs.repo_name }}:${{ needs.release.outputs.image_tag }}
-          cache-from: type=registry,ref=${{ env.ARTIFACT_REGISTRY }}/${{ github.repository }}/cache/${{ needs.release.outputs.repo_name }}:buildcache
-          cache-to: type=registry,ref=${{ env.ARTIFACT_REGISTRY }}/${{ github.repository }}/cache/${{ needs.release.outputs.repo_name }}:buildcache,mode=max
+          # cache-from: type=registry,ref=${{ env.ARTIFACT_REGISTRY }}/${{ github.repository }}/cache/${{ needs.release.outputs.repo_name }}:buildcache
+          # cache-to: type=registry,ref=${{ env.ARTIFACT_REGISTRY }}/${{ github.repository }}/cache/${{ needs.release.outputs.repo_name }}:buildcache,mode=max
