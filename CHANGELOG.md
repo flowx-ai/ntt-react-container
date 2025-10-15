@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://github.com/alexpirtea-flowx/ntt-react-container/compare/v0.0.2...v0.1.0) (2025-10-15)
+
+
+### Features
+
+* add environment.prod.ts ([f3e68f6](https://github.com/alexpirtea-flowx/ntt-react-container/commit/f3e68f67ed7601e03c59e0a7e79d2ae09539647c))
+
 ## [0.0.2](https://github.com/alexpirtea-flowx/ntt-react-container/compare/v0.0.1...v0.0.2) (2025-10-15)
 
 
