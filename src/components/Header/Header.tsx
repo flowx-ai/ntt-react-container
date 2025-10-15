@@ -29,7 +29,7 @@ export const Header = () => {
           </form>
           <FlxIcon
             className="logout"
-            name="logoutIcon"
+            // name="logoutIcon"
             onClick={() => {
               auth.signOut()
               navigate('/', { replace: true })
