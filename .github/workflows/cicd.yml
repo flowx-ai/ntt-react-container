@@ -183,7 +183,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@e2e5e9a103e331dad343f381a29e654aea3cf8fc # v1.2.4
         with:
           workflow: delegated-deploy.yaml
-          repo: alexpirtea-flowx/flowx-argocd-install-ntt
+          repo: flowx-ai/flowx-argocd-install-ntt
           ref: main
           inputs: '{"component":"react-container","version":"${{ needs.release.outputs.image_tag }}"}'
-          token: "${{ secrets.ALEXPIRTEA_FLOWX_TOKEN }}"
+          token: "${{ secrets.FLOWX_AI_TOKEN }}"
