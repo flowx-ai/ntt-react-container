@@ -1,0 +1,170 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+
+env:
+  ARTIFACT_REGISTRY: 'ghcr.io'
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+concurrency:
+  group: cicd-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    # Skip workflow for non-release commits on release-please branches
+    if: "!startsWith(github.ref, 'refs/heads/release-please--') || contains(github.event.head_commit.message, 'chore(main): release')"
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NEXUS_REGISTRY_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          registry-url: 'https://nexus-jx.dev.rd.flowx.ai/repository/npm-group/'
+          always-auth: true
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Rebuild native modules & run prepare
+        run: npm rebuild && npm run prepare --if-present
+
+      - name: Build project
+        run: npm run build -- --configuration production
+
+      ## TODO(apirtea): disabled for now
+      # - name: Semgrep SAST scan
+      #   run: docker run --rm -v "$(pwd):/src" semgrep/semgrep semgrep scan --json /src > semgrep-results.json || true
+
+      # - name: Generate Semgrep Summary
+      #   run: |
+      #     echo "## 🔍 Semgrep Security Scan Results" >> $GITHUB_STEP_SUMMARY
+      #     echo "" >> $GITHUB_STEP_SUMMARY
+
+      #     # Check if semgrep found any issues
+      #     if [ -f semgrep-results.json ]; then
+      #       FINDINGS_COUNT=$(jq '.results | length' semgrep-results.json 2>/dev/null || echo "0")
+      #       echo "**Findings:** $FINDINGS_COUNT" >> $GITHUB_STEP_SUMMARY
+      #       echo "" >> $GITHUB_STEP_SUMMARY
+
+      #       if [ "$FINDINGS_COUNT" -gt 0 ]; then
+      #         echo "### 🚨 Issues Found" >> $GITHUB_STEP_SUMMARY
+      #         echo "" >> $GITHUB_STEP_SUMMARY
+      #         echo "| File | Line | Rule | Severity | Message |" >> $GITHUB_STEP_SUMMARY
+      #         echo "|------|------|------|----------|---------|" >> $GITHUB_STEP_SUMMARY
+
+      #         jq -r '.results[] | "| \(.path) | \(.start.line) | \(.check_id) | \(.extra.severity) | \(.extra.message // .message) |"' semgrep-results.json >> $GITHUB_STEP_SUMMARY
+      #       else
+      #         echo "✅ No security issues found!" >> $GITHUB_STEP_SUMMARY
+      #       fi
+      #     else
+      #       echo "❌ Semgrep scan failed or no results file generated" >> $GITHUB_STEP_SUMMARY
+      #     fi
+
+      # - name: Upload build artifacts
+      #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: build-artifacts
+      #     path: |
+      #       dist
+      #     retention-days: 1
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    outputs:
+      release_created: ${{ steps.rp.outputs.release_created }}
+      tag_name: ${{ steps.rp.outputs.tag_name }}
+      repo_name: ${{ steps.vars.outputs.repo_name }}
+      image_tag: ${{ steps.vars.outputs.image_tag }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run release-please
+        id: rp
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_PAT }}
+          config-file: .github/release-please-config.json
+
+      - name: Derive docker image metadata
+        id: vars
+        run: |
+          echo "repo_name=${GITHUB_REPOSITORY##*/}" >> "$GITHUB_OUTPUT"  # repo part after the slash
+
+          # if release-please created a release, use the tag from release-please, otherwise use the short sha and run number
+          if [ "${{ steps.rp.outputs.release_created }}" = "true" ]; then
+            IMAGE_TAG="${{ steps.rp.outputs.tag_name }}"
+          else
+            IMAGE_TAG="${GITHUB_SHA::7}-${{ github.run_number }}"
+          fi
+          echo "image_tag=$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+  docker-push:
+    name: docker-push (${{ matrix.name }})
+    needs: [build-and-test, release]
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    strategy:
+      matrix:
+        include:
+          - name: "sbx"
+          # - name: "prod"
+          #   condition: ${{ needs.release.outputs.release_created == 'true' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist
+
+      # TODO(apitea): check for current working dir
+      - name: Configure healthcheck version
+        if: ${{ hashFiles('healthcheck.json') != '' }}
+        run: |
+          sed -i -e "s/VERSION/${{ needs.release.outputs.image_tag }}/g" healthcheck.json
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.ARTIFACT_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push image (${{ matrix.name }})
+        if: ${{ matrix.name == 'dev' || matrix.condition }}
+        uses: docker/build-push-action@31159d49c0d4756269a0940a750801a1ea5d7003 #v6.1.0
+        id: build
+        env:
+          DOCKER_BUILD_NO_SUMMARY: true
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ needs.release.outputs.repo_name }}:${{ needs.release.outputs.image_tag }}
+          cache-from: type=registry,ref=${{ env.ARTIFACT_REGISTRY }}/${{ github.repository }}/cache/${{ needs.release.outputs.repo_name }}:buildcache
+          cache-to: type=registry,ref=${{ env.ARTIFACT_REGISTRY }}/${{ github.repository }}/cache/${{ needs.release.outputs.repo_name }}:buildcache,mode=max

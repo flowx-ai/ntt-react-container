@@ -1,0 +1,17 @@
+{
+    "status" : "UP",
+    "components" : {
+      "accessInfo" : {
+        "status" : "UP"
+      },
+      "buildInfo" : {
+        "status" : "UP",
+        "details" : {
+          "artifactId" : "container",
+          "version" : "VERSION",
+          "name" : "NTT App Container",
+          "group" : "ai.flowx.container"
+        }
+      }
+    }
+  }

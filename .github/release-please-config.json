@@ -1,0 +1,10 @@
+{
+    "pull-request-footer": "Merging this PR will automatically deploy the new version to SBX environment.",
+    "packages": {
+        ".": {
+            "release-type": "node",
+            "skip-snapshot": true,
+            "include-component-in-tag": false
+        }
+    }
+}
