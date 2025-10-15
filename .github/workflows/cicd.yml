@@ -46,7 +46,7 @@ jobs:
         run: npm rebuild && npm run prepare --if-present
 
       - name: Build project
-        run: npm run build -- --configuration production
+        run: npm run build # -- --configuration production
 
       ## TODO(apirtea): disabled for now
       # - name: Semgrep SAST scan
