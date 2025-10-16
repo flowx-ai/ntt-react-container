@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1](https://github.com/alexpirtea-flowx/ntt-react-container/compare/v0.1.0...v0.1.1) (2025-10-16)
+
+
+### Bug Fixes
+
+* workaround for env vars ([4a92e07](https://github.com/alexpirtea-flowx/ntt-react-container/commit/4a92e070d930450c06801daec55390955f1042d7))
+* workflow actions read ([9b566f4](https://github.com/alexpirtea-flowx/ntt-react-container/commit/9b566f4b15e6247ef0821b031f3668d229f26428))
+
 ## [0.1.0](https://github.com/alexpirtea-flowx/ntt-react-container/compare/v0.0.2...v0.1.0) (2025-10-15)
 
 
