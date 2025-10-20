@@ -1,20 +1,20 @@
 export const environment = {
-  baseUrl: '',
-  staticAssetsPath: '',
+  baseUrl: 'https://admin.ntt-dev.az1.cloud.flowxai.dev',
+  staticAssetsPath: 'https://minio-api.ntt-dev.az1.cloud.flowxai.dev/cms/medialibrary',
 
   processApiPath: '/onboarding',
   scanTimeout: 50000,
 
   keycloak: {
     // Url of the Identity Provider
-    issuer: '',
+    issuer: 'https://auth.ntt-dev.az1.cloud.flowxai.dev/auth/realms/flowx',
 
     // URL of the SPA to redirect the user to after login
     redirectUri: 'http://localhost:4200/',
 
     // The SPA's id.
     // The SPA is registerd with this id at the auth-serverß
-    clientId: '',
+    clientId: 'flowx-platform-authenticate',
 
     responseType: 'code',
     // set the scope for the permissions the client should request

@@ -1,0 +1,174 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  gap: 1rem;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    input:not([type='checkbox']) {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      min-width: 350px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+  }
+
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.flx-button-container:not(.flx-themed) {
+  // non-theme variables
+  --flxTheme-buttonContainer-accentColor: #006bd8;
+  --flxTheme-buttonContainer-borderWidth: 1px;
+  --flxTheme-buttonContainer-borderRadius: 4px;
+  --flxTheme-buttonContainer-paddingRight: 32px;
+  --flxTheme-buttonContainer-paddingLeft: 32px;
+  --flxTheme-buttonContainer-paddingTop: 8px;
+  --flxTheme-buttonContainer-paddingBottom: 8px;
+  --flxTheme-buttonContainer-fontFamily: Arial, sans-serif;
+  --flxTheme-buttonContainer-fontSize: 14px;
+  --flxTheme-buttonContainer-fontWeight: 500;
+  --flxTheme-buttonContainer-lineHeight: 22px;
+  --flxTheme-buttonContainer-borderColor: #ffffff00;
+  --flxTheme-buttonContainer-backgroundColor: #006bd8;
+  --flxTheme-buttonContainer-color: #ffffff;
+
+  --elementsGap: 8px; // TODO: extract in theme
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--elementsGap);
+  margin: 0;
+  background: initial;
+  border-style: solid;
+  transition-property: background-color, color, border-color, outline-color;
+  transition-duration: .2s;
+  cursor: pointer;
+  outline-color: transparent;
+  width: fit-content;
+
+  // THEME SETTINGS
+  // generic props
+  border-width: var(--flxTheme-buttonContainer-borderWidth);
+  border-radius: var(--flxTheme-buttonContainer-borderRadius);
+  font-family: var(--flxTheme-buttonContainer-fontFamily);
+  font-size: var(--flxTheme-buttonContainer-fontSize);
+  font-weight: var(--flxTheme-buttonContainer-fontWeight);
+  line-height: var(--flxTheme-buttonContainer-lineHeight);
+  padding-top: var(--flxTheme-buttonContainer-paddingTop);
+  padding-right: var(--flxTheme-buttonContainer-paddingRight);
+  padding-bottom: var(--flxTheme-buttonContainer-paddingBottom);
+  padding-left: var(--flxTheme-buttonContainer-paddingLeft);
+
+  // button type variables
+  background-color: var(--flxTheme-buttonContainer-backgroundColor);
+  border-color: var(--flxTheme-buttonContainer-borderColor);
+  color: var(--flxTheme-buttonContainer-color);
+
+}
+
+.flx-tab-bar:not(.flx-themed) {
+  --flxTheme-tabBar-accentColor: #006bd8;
+  --flxTheme-tabBar-borderRadius: 8px;
+  --flxTheme-tabBar-borderWidth: 0px;
+  --flxTheme-tabBar-componentGap: 4px;
+  --flxTheme-tabBar-fontFamily: Arial, sans-serif;
+  --flxTheme-tabBar-fontSize: 14px;
+  --flxTheme-tabBar-fontWeight: 600;
+  --flxTheme-tabBar-gap: 8px;
+  --flxTheme-tabBar-lineHeight: 22px;
+  --flxTheme-tabBar-paddingBottom: 8px;
+  --flxTheme-tabBar-paddingLeft: 8px;
+  --flxTheme-tabBar-paddingRight: 8px;
+  --flxTheme-tabBar-paddingTop: 8px;
+  --flxTheme-tabBar-shadow: 0px 4px 16px 0px #0000001f;
+  --flxTheme-tabBar-tabRadius: 0px;
+  --flxTheme-tabBar-underlineWidth: 1px;
+
+  & .flx-tab-header {
+    text-transform: capitalize;
+
+    &.active {
+      --flxTheme-tabBar-backgroundColor: #ffffff;
+      --flxTheme-tabBar-borderColor: #ffffff00;
+      --flxTheme-tabBar-iconColor: #006bd8;
+      --flxTheme-tabBar-titleColor: #006bd8;
+      --flxTheme-tabBar-underlineColor: #006bd8;
+    }
+
+    &.active:hover {
+      --flxTheme-tabBar-backgroundColor: #ffffff;
+      --flxTheme-tabBar-borderColor: #ffffff00;
+      --flxTheme-tabBar-iconColor: #006bd8;
+      --flxTheme-tabBar-titleColor: #006bd8;
+      --flxTheme-tabBar-underlineColor: #006bd8;
+    }
+
+    &:not(.active) {
+      --flxTheme-tabBar-backgroundColor: #ffffff;
+      --flxTheme-tabBar-borderColor: #ffffff00;
+      --flxTheme-tabBar-iconColor: #898989;
+      --flxTheme-tabBar-titleColor: #898989;
+      --flxTheme-tabBar-underlineColor: #ffffff00;
+    }
+
+    &:not(.active):hover {
+      --flxTheme-tabBar-backgroundColor: #ffffff;
+      --flxTheme-tabBar-borderColor: #ffffff00;
+      --flxTheme-tabBar-iconColor: #898989;
+      --flxTheme-tabBar-titleColor: #898989;
+      --flxTheme-tabBar-underlineColor: #ffffff00;
+    }
+  }
+}
+
+
+.logout-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.fixed-buttons {
+  display: flex;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  opacity: 0.3;
+}
+
+.fixed-buttons:hover {
+  opacity: 1;
+}
